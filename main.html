@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="slidecontainer">
+        <label>Base Motor: </label>
+        <input type="range" min="0" max="180" value="90" class="slider" id="basemotor" onchange="sendSliders()">
+        <button id="basemotorkill" onclick="kill('basemotorkill')">Kill</button>
+        <label>Arm 1: </label>
+        <input type="range" min="0" max="180" value="90" class="slider" id="arm1" onchange="sendSliders()">
+        <button id="arm1motorkill" onclick="kill('arm1motorkill')">Kill</button>
+        <label>Arm 2: </label>
+        <input type="range" min="0" max="180" value="90" class="slider" id="arm2" onchange="sendSliders()">
+        <button id="arm2motorkill" onclick="kill('arm2motorkill')">Kill</button>
+        <label>Claw: </label>
+        <input type="range" min="0" max="180" value="90" class="slider" id="claw" onchange="sendSliders()">
+        <button id="clawkill" onclick="kill('clawkill')">Kill</button>
+
+
+    </div>
+      
+    <script>
+        let dict = {
+            "basemotor":0,
+            "arm1":0,
+            "arm2":0,
+            "claw":0
+        }
+        async function kill(id){
+            if (id=='basemotorkill'){
+                document.getElementById('basemotor').value = 45
+            }
+            else if (id=='arm1motorkill'){
+                document.getElementById('arm1').value = 45
+            }
+            else if (id=='arm2motorkill'){
+                document.getElementById('arm2').value = 45
+            }
+            else {
+                document.getElementById('claw').value = 45
+            }
+            sendSliders()
+        }
+        async function sendSliders(){
+            dict["basemotor"] = document.getElementById('basemotor').value
+            dict["arm1"] = document.getElementById('arm1').value
+            dict["arm2"] = document.getElementById('arm2').value
+            dict["claw"] = document.getElementById('claw').value
+            let url = `http://127.0.0.1:5000/processinputs?motors=${JSON.stringify(dict)}`
+            const response = await fetch(url)
+        }
+    </script>
+</body>
+</html>
